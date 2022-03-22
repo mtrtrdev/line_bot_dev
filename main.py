@@ -68,6 +68,7 @@ def callback():
 def handle_message(event):
     limit = 10
     text=event.message.text
+    print(text)
     lists=scrape.getNews(text)
     r = []
     limit = 10
@@ -77,7 +78,6 @@ def handle_message(event):
         url   = link["pickup_id"]
         r.append("{}({})". format(url, title))
     result = ', '.join(map(str, r))
-
     print(result)
 
     line_bot_api.reply_message(
