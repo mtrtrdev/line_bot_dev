@@ -59,6 +59,7 @@ def callback():
 def handle_message(event):
     text=event.message.text #検索文字列
     lists=scrape.getNews(text) #スクレイピング
+    print(len(list)!=0)
     if len(list)!=0:
         r = []
         limit = 15
