@@ -25,11 +25,9 @@ def getNews(word):
         return False
 
     a_elems = base.find_all("a", class_="newsFeed_item_link")
-    if a_elems is None:
-        return False
     
     #タイトルとURLをリストに代入、返却
-    items = []
+    result = []
     for elem in a_elems:
         item = {}
         href = elem.attrs['href']
@@ -38,8 +36,6 @@ def getNews(word):
 
         item["pickup_id"] = pickup_id
         item["title"] = title
-        items.append(item)
+        result.append(item)
     
-    return items
-
-
+    return result
