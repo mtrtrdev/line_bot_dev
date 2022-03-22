@@ -68,22 +68,21 @@ def callback():
 def handle_message(event):
     limit = 10
     text=event.message.text
-    # lists=scrape.getNews(text)
+    lists=scrape.getNews(text)
     r = []
     limit = 10
-    # for i in range(limit):
-    #     link  = lists[i]
-    #     title = link["title"]
-    #     url   = link["pickup_id"]
-    #     r.append("{}({})". format(url, title))
-    # result = ', '.join(map(str, r))
+    for i in range(limit):
+        link  = lists[i]
+        title = link["title"]
+        url   = link["pickup_id"]
+        r.append("{}({})". format(url, title))
+    result = ', '.join(map(str, r))
 
     line_bot_api.reply_message(
         event.reply_token,
-        [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！")]
-        # [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
-        # TextSendMessage(result)
-        # ]
+        [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
+        TextSendMessage(result)
+        ]
     )
  
 #Webアプリ実行
