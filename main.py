@@ -60,31 +60,29 @@ def handle_message(event):
     text=event.message.text #検索文字列
     lists=scrape.getNews(text) #スクレイピング
     print(len(list))
-    if len(list)!=0:
-        r = []
-        limit = 15
-        for i in range(limit):
-            link  = lists[i]
-            title = link["title"]
-            url   = link["pickup_id"]
-            r.append("{}({})". format(url, title))
-    
-        if len(r)!=0:
-            result = ', '.join(map(str, r))
-            line_bot_api.reply_message(event.reply_token,
-                [
-                    TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
-                    TextSendMessage(text=result)
-                ]
-            )
-
-    else:
+    if len(list)==0:
         line_bot_api.reply_message(event.reply_token, 
             TextSendMessage("検索結果がありません。終了します。")
         )
+        return
 
-    
- 
+    r = []
+    limit = 15
+    for i in range(limit):
+        link  = lists[i]
+        title = link["title"]
+        url   = link["pickup_id"]
+        r.append("{}({})". format(url, title))
+
+    result = ', '.join(map(str, r))
+    line_bot_api.reply_message(event.reply_token,
+        [
+            TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
+            TextSendMessage(text=result)
+        ]
+    )
+
+     
 #Webアプリ実行
 if __name__ == "__main__":
     #ポート番号の設定
