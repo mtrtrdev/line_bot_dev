@@ -78,13 +78,16 @@ def handle_message(event):
         r.append("{}({})". format(url, title))
     result = ', '.join(map(str, r))
 
+    print(result)
+
     line_bot_api.reply_message(
         event.reply_token,
-        [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
-        TextSendMessage(result)
+        [
+            TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
+            TextSendMessage(text=result)
         ]
     )
-    print(result)
+    
  
 #Webアプリ実行
 if __name__ == "__main__":
