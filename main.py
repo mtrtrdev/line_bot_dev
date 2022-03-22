@@ -84,10 +84,10 @@ def handle_message(event):
         TextSendMessage(result)
         ]
     )
+    print(result)
  
 #Webアプリ実行
 if __name__ == "__main__":
-    print("検索ワードを入力してくダサい。")
     #ポート番号の設定
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
