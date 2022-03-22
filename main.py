@@ -59,7 +59,7 @@ def callback():
 def handle_message(event):
     text=event.message.text #検索文字列
     lists=scrape.getNews(text) #スクレイピング
-    print(len(list)!=0)
+    print(len(list))
     if len(list)!=0:
         r = []
         limit = 15
@@ -69,13 +69,14 @@ def handle_message(event):
             url   = link["pickup_id"]
             r.append("{}({})". format(url, title))
     
-        result = ', '.join(map(str, r))
-        line_bot_api.reply_message(event.reply_token,
-            [
-                TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
-                TextSendMessage(text=result)
-            ]
-        )
+        if len(r)!=0:
+            result = ', '.join(map(str, r))
+            line_bot_api.reply_message(event.reply_token,
+                [
+                    TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
+                    TextSendMessage(text=result)
+                ]
+            )
 
     else:
         line_bot_api.reply_message(event.reply_token, 
