@@ -31,9 +31,6 @@ line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET) 
 
 
- 
- 
-## 1 ##
 #Webhookからのリクエスト（スマホ → LineAPI）をチェック
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -54,39 +51,36 @@ def callback():
     # handleの処理を終えればOK
     return 'OK'
  
-## 2 ##
+
 ###############################################
-#LINEのメッセージの取得と返信内容の設定(オウム返し)
-###############################################
- 
-#LINEでMessageEvent（普通のメッセージを送信された場合）が起こった場合に、
-#def以下の関数を実行します。
-#reply_messageの第一引数のevent.reply_tokenは、イベントの応答に用いるトークンです。 
-#第二引数には、linebot.modelsに定義されている返信用のTextSendMessageオブジェクトを渡しています。
- 
+#LINEで入力した検索文字列と、スクレイピング処理
+############################################### 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    limit = 10
-    text=event.message.text
-    print(text)
-    lists=scrape.getNews(text)
+    text=event.message.text #検索文字列
+    lists=scrape.getNews(text) #スクレイピング
     r = []
-    limit = 10
+    limit = 15
     for i in range(limit):
         link  = lists[i]
         title = link["title"]
         url   = link["pickup_id"]
         r.append("{}({})". format(url, title))
-    result = ', '.join(map(str, r))
-    print(result)
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        [
-            TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
-            TextSendMessage(text=result)
-        ]
-    )
+    
+    #分岐（結果有無）
+    if not r:
+        line_bot_api.reply_message(
+        event.reply_token, TextSendMessage("検索結果がありません。終了します。"))
+        return
+    else:        
+        result = ', '.join(map(str, r))
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
+                TextSendMessage(text=result)
+            ]
+        )
     
  
 #Webアプリ実行

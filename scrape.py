@@ -9,20 +9,21 @@ url = 'https://news.yahoo.co.jp/search?ei=utf-8'
 # 記事取得関数
 def getNews(word):
 
+    #URL生成
     if word != "" :
         mod_url = "{}&p='{}'".format(url, word)
     else:
         mod_url = url
+        
     #パース
     res = requests.get(mod_url)
     
     #スクレイピング
     soup = bs4(res.text,'lxml')
     base = soup.find(class_="newsFeed")
-
     a_elems = base.find_all("a", class_="newsFeed_item_link")
 
-
+    #タイトルとURLをリストに代入、返却
     items = []
     for elem in a_elems:
         item = {}
