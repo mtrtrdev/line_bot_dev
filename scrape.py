@@ -21,13 +21,13 @@ def getNews(word):
     #スクレイピング
     soup = bs4(res.text,'lxml')
     base = soup.find(class_="newsFeed")
-
-    print(base)
+    if base is None:
+        return False
 
     a_elems = base.find_all("a", class_="newsFeed_item_link")
-
+    if a_elems is None:
+        return False
     
-
     #タイトルとURLをリストに代入、返却
     items = []
     for elem in a_elems:
