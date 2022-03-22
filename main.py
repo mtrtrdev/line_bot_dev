@@ -17,7 +17,6 @@ import os
 
 import scrape
 
-
 #Webアプリ作成 
 app = Flask(__name__)
  
@@ -69,7 +68,7 @@ def callback():
 def handle_message(event):
     limit = 10
     text=event.message.text
-    lists=scrape.getNews(text)
+    # lists=scrape.getNews(text)
     r = []
     limit = 10
     # for i in range(limit):
