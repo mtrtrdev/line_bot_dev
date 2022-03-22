@@ -36,3 +36,4 @@ def getNews(word):
     
     return items
 
+

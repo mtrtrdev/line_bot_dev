@@ -68,28 +68,24 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     limit = 10
-
-    
     text=event.message.text
-
     lists=scrape.getNews(text)
-
-    for i in range(len(lists)):
+    r = []
+    limit = 10
+    for i in range(limit):
         link  = lists[i]
         title = link["title"]
         url   = link["pickup_id"]
-        ret   = "{}({})". format(url, title)
+        r.append("{}({})". format(url, title))
 
-    result = ', '.join(map(str, ret))
-
-    # text = "「{}」ですかぁ・・・".format(text)
+    result = ', '.join(map(str, r))
 
     line_bot_api.reply_message(
         event.reply_token,
         [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
         TextSendMessage(result)
         ]
-        )
+    )
  
 #Webアプリ実行
 if __name__ == "__main__":
