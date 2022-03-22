@@ -14,14 +14,19 @@ def getNews(word):
         mod_url = "{}&p='{}'".format(url, word)
     else:
         mod_url = url
-        
+
     #パース
     res = requests.get(mod_url)
     
     #スクレイピング
     soup = bs4(res.text,'lxml')
     base = soup.find(class_="newsFeed")
+
+    print(base)
+
     a_elems = base.find_all("a", class_="newsFeed_item_link")
+
+    
 
     #タイトルとURLをリストに代入、返却
     items = []
