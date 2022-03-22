@@ -60,27 +60,28 @@ def handle_message(event):
     text=event.message.text #検索文字列
     lists=scrape.getNews(text) #スクレイピング
     print(any(lists))
-    if any(lists) != True:
-        line_bot_api.reply_message(
-    event.reply_token, TextSendMessage("検索結果がありません。終了します。"))
+    if any(lists):
+        r = []
+        limit = 15
+        for i in range(limit):
+            link  = lists[i]
+            title = link["title"]
+            url   = link["pickup_id"]
+            r.append("{}({})". format(url, title))
+    
+        result = ', '.join(map(str, r))
+        line_bot_api.reply_message(event.reply_token,
+            [
+                TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
+                TextSendMessage(text=result)
+            ]
+        )
+
+    else:
+        line_bot_api.reply_message(event.reply_token, 
+            TextSendMessage("検索結果がありません。終了します。"))
         return
 
-    r = []
-    limit = 15
-    for i in range(limit):
-        link  = lists[i]
-        title = link["title"]
-        url   = link["pickup_id"]
-        r.append("{}({})". format(url, title))
-    
-    result = ', '.join(map(str, r))
-    line_bot_api.reply_message(
-        event.reply_token,
-        [
-            TextSendMessage(text=f"検索ワード「{text}」での検索結果[{limit}]件です！"),
-            TextSendMessage(text=result)
-        ]
-    )
     
  
 #Webアプリ実行
