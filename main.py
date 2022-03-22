@@ -1,5 +1,8 @@
 from flask import Flask, request, abort
- 
+# flask（Webアプリ用のライブラリ）
+# request httpリクエストのデータ取得用関数
+# abprt http用のExceptionのような関数
+
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -10,20 +13,29 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
- 
+# 環境変数操作を行うモジュール
+
+import scrape
+
+
+#Webアプリ作成 
 app = Flask(__name__)
  
 #環境変数取得
-# LINE Developersで設定されているアクセストークンとChannel Secretをを取得し、設定します。
+#LINE Developersで設定されている値をを取得、設定
+#アクセストークン
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
- 
+#Channel Secret
+YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
+
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+handler      = WebhookHandler(YOUR_CHANNEL_SECRET) 
+
+
  
  
 ## 1 ##
-#Webhookからのリクエストをチェックします。
+#Webhookからのリクエスト（スマホ → LineAPI）をチェック
 @app.route("/callback", methods=['POST'])
 def callback():
     # リクエストヘッダーから署名検証のための値を取得します。
@@ -55,16 +67,33 @@ def callback():
  
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    limit = 10
+
+    
     text=event.message.text
-    text = "「{}」ですかぁ・・・".format(text)
+
+    lists=scrape.getNews(text)
+
+    for i in range(len(lists)):
+        link  = lists[i]
+        title = link["title"]
+        url   = link["pickup_id"]
+        ret   = "{}({})". format(url, title)
+
+    result = ', '.join(map(str, ret))
+
+    # text = "「{}」ですかぁ・・・".format(text)
+
     line_bot_api.reply_message(
         event.reply_token,
-        # TextSendMessage(text=event.message.text)) #ここでオウム返しのメッセージを返します。
-        TextSendMessage(text)
-        ) #ここでオウム返しのメッセージを返します。
+        [TextSendMessage(text=f"「{text}」での検索結果[{limit}]件です！"),
+        TextSendMessage(result)
+        ]
+        )
  
-# ポート番号の設定
+#Webアプリ実行
 if __name__ == "__main__":
-#    app.run()
+    print("検索ワードを入力してくダサい。")
+    #ポート番号の設定
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
