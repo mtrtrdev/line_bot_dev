@@ -37,5 +37,6 @@ def getNews(word):
         item["pickup_id"] = pickup_id
         item["title"] = title
         result.append(item)
+        result.append("\n")
     
     return result

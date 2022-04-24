@@ -1,11 +1,12 @@
+・runtime.txt
 実行環境整備（バージョン指定）
 Pythonのバージョンを記載する設定ファイル
-ファイル名：runtime.txt
 
+・requirements.txt
 実行環境整備（モジュール指定）
 インストールするライブラリを記載する設定ファイル
-ファイル名：requirements.txt
 
+・Procfile
 実行内容（挙動指定）
 プログラムの実行方法を定義する設定ファイル
-ファイル名：Procfile
+
