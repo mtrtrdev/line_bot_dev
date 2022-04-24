@@ -6,7 +6,10 @@ import requests
 # アクセス先URLを設定
 url = 'https://news.yahoo.co.jp/search?ei=utf-8'
 
-# 記事取得関数
+"""
+記事取得関数
+debug command: python -c "import scrape; scrape.getNews(word)"
+"""
 def getNews(word):
 
     #URL生成
@@ -37,6 +40,5 @@ def getNews(word):
         item["pickup_id"] = pickup_id
         item["title"] = title
         result.append(item)
-        result.append("\n")
     
     return result

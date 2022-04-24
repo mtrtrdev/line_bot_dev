@@ -71,7 +71,7 @@ def handle_message(event):
         link  = lists[i]
         title = link["title"]
         url   = link["pickup_id"]
-        r.append("{}({})". format(url, title))
+        r.append("{}\n({})". format(url, title))
 
     result = ', '.join(map(str, r))
     line_bot_api.reply_message(event.reply_token,
